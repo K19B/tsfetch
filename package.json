@@ -1,0 +1,40 @@
+{
+  "name": "tsfetch-re",
+  "version": "0.0.1",
+  "description": "Command-line system information tool written in TypeScript.",
+  "main": "./dist/main.js",
+  "module": "./dist/main.mjs",
+  "types": "./dist/main.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "*"
+  ],
+  "keywords": [
+    "neofetch",
+    "systeminfo",
+    "typescript"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup"
+  },
+  "bin": {
+    "tsfetch": "dist/main.js"
+  },
+  "author": "MBRjun",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/K19B/tsfetch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/K19B/tsfetch/issues"
+  },
+  "homepage": "https://github.com/K19B/tsfetch#readme",
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}
