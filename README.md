@@ -4,7 +4,7 @@ Command-line system information tool written in TypeScript.
 ## Install
 ```bash
 # use -g if you want to install it as a command
-npm i tsfetch
+npm i tsfetch-re
 ```
 
 ## Usage

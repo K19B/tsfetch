@@ -90,16 +90,17 @@ function requireNodeStr() {
 
 // call requireUptimeStr() to init
 let uptimeStr: string = '',
-    uptime: string = '? day, ? hour, ? min'
+    uptime: string = '? day, ? hour, ? min',
+    uptimeCache: number = 0
 
 
 function requireUptimeStr() {
-    if (!uptimeStr) {
+    if (uptimeCache != os.uptime()) {
         ignoreErr(() => {
-            let uptimeRaw = os.uptime();
-            let days = Math.floor(uptimeRaw / (24 * 60 * 60));
-            let hours = Math.floor((uptimeRaw % (24 * 60 * 60)) / (60 * 60));
-            let minutes = Math.floor((uptimeRaw % (60 * 60)) / 60);
+            let uptimeCache = os.uptime();
+            let days = Math.floor(uptimeCache / (24 * 60 * 60));
+            let hours = Math.floor((uptimeCache % (24 * 60 * 60)) / (60 * 60));
+            let minutes = Math.floor((uptimeCache % (60 * 60)) / 60);
             let uptimeFormat = (days: number, hours: number, minutes: number): string => {
                 const dayStr = days === 1 ? `${days} day` : `${days} days`;
                 const hourStr = hours === 1 ? `${hours} hour` : `${hours} hours`;
@@ -120,15 +121,16 @@ function requireUptimeStr() {
 
 // call requireProcStr() to init
 let procStr: string = '',
-    proc: string = 'Common CPU'
+    proc: string = 'Common CPU',
+    procCache: os.CpuInfo[]
 
 function requireProcStr() {
-    if (!procStr) {
+    if (procCache != os.cpus()) {
         ignoreErr(() => {
-            let cpus = os.cpus();
-            let model = cpus[0].model.replace(/ *\((R|TM|C)\)/g, '');;
-            let freq = (cpus[0].speed / 1000).toFixed(2);
-            let thrs = cpus.length; // logical cores(threads)
+            let procCache = os.cpus();
+            let model = procCache[0].model.replace(/ *\((R|TM|C)\)/g, '');;
+            let freq = (procCache[0].speed / 1000).toFixed(2);
+            let thrs = procCache.length; // logical cores(threads)
             proc = `${model} (${thrs}) @ ${freq}GHz`
         })
         procStr = 'CPU: ' + proc;
@@ -137,10 +139,12 @@ function requireProcStr() {
 
 // call requireMemoryStr() to init
 let memoryStr: string = '',
-    memory: string = '? GiB'
+    memory: string = '? GiB',
+    memT: number,
+    memF: number
 
 function requireMemoryStr() {
-    if (!memoryStr) {
+    if ((memF != os.freemem()) || (memT != os.totalmem())) {
         ignoreErr(() => {
             /*
                 memX: in Bytes
@@ -151,8 +155,8 @@ function requireMemoryStr() {
             */
             let memUA, memTA;
 
-            let memT = os.totalmem();
-            let memF = os.freemem();
+            memT = os.totalmem();
+            memF = os.freemem();
             let memU = memT - memF;
 
             let memUM = memU / (1024 ** 2);
