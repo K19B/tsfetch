@@ -74,6 +74,20 @@ function requireKernStr() {
     }
 }
 
+// call requireNodedStr() to init
+let nodeStr: string = '',
+    node: string = 'TS/JS Engine'
+
+
+function requireNodeStr() {
+    if (!nodeStr) {
+        ignoreErr(() => {
+            node = 'Node.JS (' + process.version.slice(1) + ')'; // slice: remove 'v' in 'vX.Y.Z'
+        })
+        nodeStr = 'Engine: ' + node;
+    }
+}
+
 // call requireUptimeStr() to init
 let uptimeStr: string = '',
     uptime: string = '? day, ? hour, ? min'
@@ -165,6 +179,7 @@ function fetch() {
     requireDistroStr();
     requireUserStr();
     requireKernStr();
+    requireNodeStr();
     requireUptimeStr();
     requireProcStr();
     requireMemoryStr();
@@ -174,20 +189,24 @@ function fetch() {
         userLine + newline +
         distroStrFull + newline +
         kernStr + newline +
+        nodeStr + newline +
         uptimeStr + newline +
         procStr + newline +
         memoryStr
     );
 }
 
+if (require.main === module) {
+    console.log(fetch());
+}
+
 export {
     requireUserStr, userStr, userLine,
     requireDistroStr, distroStrFull,
     requireKernStr, kernStr,
+    requireNodeStr, nodeStr,
     requireUptimeStr, uptimeStr,
     requireProcStr, procStr,
     requireMemoryStr, memoryStr,
     fetch
 }
-
-console.log(fetch());
